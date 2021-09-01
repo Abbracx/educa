@@ -49,7 +49,12 @@ class Content(models.Model):
                                 related_name='contents',
                                 on_delete=models.CASCADE)
     content_type = models.ForeignKey(ContentType,
-                                    on_delete=models.CASCADE)
+                                    on_delete=models.CASCADE,
+                                    limit_choices_to={'model__in':(
+                                        'text',
+                                        'video',
+                                        'image',
+                                        'file')})
     object_id = models.PositiveIntegerField()
     item = GenericForeignKey('content_type', 'object_id')
 
@@ -72,10 +77,10 @@ class Text(ItemBase):
     content = models.TextField()
 
 class File(ItemBase):
-    file = models.FIleField(upload_to='files')
+    file = models.FileField(upload_to='files')
 
 class Image(ItemBase):
-    image = models.FIleField(upload_to='images')
+    image = models.FileField(upload_to='images')
 
 class Video(ItemBase):
     url = models.URLField()
